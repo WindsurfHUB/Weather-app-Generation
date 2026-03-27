@@ -1,76 +1,47 @@
-# 🌤️ Advanced Weather App (Open-Meteo)
+# Weather Report App (TypeScript)
 
-A robust, modular weather application built with Node.js, utilizing the **Open-Meteo API** for high-accuracy geocoding and forecasting. This project follows the **TRACI Framework** for high-quality software output.
+A modern, easy-to-use weather application for Chiang Mai using the Open-Meteo API.
 
-## 🚀 Features
+## Project Structure
 
-- **Geocoding Bridge Protocol**: Automatically converts city names to precise coordinates.
-- **TRACI Standard Implementation**: Modular, documented, and error-resilient code.
-- **Human-Readable Weather**: Maps WMO codes (e.g., `0`, `51`) to friendly descriptions (e.g., "Clear sky", "Light drizzle").
-- **Zero Hardcoding**: Environment-ready configuration.
-- **Built-in Testing**: Comprehensive suite for positive, negative, and edge cases.
+- `src/api/`: API call handling (Open-Meteo).
+- `src/models/`: TypeScript interfaces/types.
+- `src/services/`: Business logic and data processing.
+- `src/utils/`: Helper functions (formatting, conversion).
+- `src/ui/`: Display logic (Console).
+- `src/config/`: Application constants (Chiang Mai coordinates).
+- `src/index.ts`: Application entry point.
 
-## 📁 Project Structure
+## Features
 
-```text
-/src        # Core logic and API handlers (Geocoding Bridge)
-/assets     # CSS and Icons (UI expansion)
-/tests      # Unit and Edge case tests
-.env        # Security: API Key storage (Excluded from VCS)
-index.js    # Main entry point
-package.json # Project dependencies and scripts
-```
+- Fetches real-time weather data for Chiang Mai.
+- Displays temperature in both Celsius and Fahrenheit.
+- Includes input validation and edge case handling for temperature conversions.
+- Modern console UI.
 
-## 🛠️ Installation & Setup
+## Getting Started
 
-1. **Clone the repository**:
-   ```bash
-   git clone <repository-url>
-   cd weather-app
-   ```
+### Prerequisites
 
-2. **Install dependencies**:
-   *(Note: This project uses native `fetch` and Node's built-in test runner, so no heavy dependencies are required for the core logic.)*
+- Node.js
+- npm
+
+### Installation
+
+1. Install dependencies:
    ```bash
    npm install
    ```
 
-3. **Environment Configuration**:
-   Create a `.env` file (already initialized in the structure) for any future private API keys or configuration.
+### Running the App
 
-## 📖 Usage
-
-To fetch the current weather for the default city (Bangkok):
+Run the application using:
 ```bash
-node index.js
+npm start
 ```
 
-### Integration Example
-```javascript
-import { getWeather } from './src/weather.js';
+## Technologies Used
 
-const data = await getWeather("London");
-console.log(data); 
-// Output: { city: 'London', temp_c: 12.5, description: 'Partly cloudy', humidity: 65, wind_speed: 10.2 }
-```
-
-## 🧪 Testing
-
-The project uses the native Node.js test runner. To run the full suite:
-```bash
-npm test
-```
-
-**Tested Scenarios:**
-- ✅ **Positive**: Valid city retrieval (Bangkok).
-- ❌ **Negative**: Non-existent city handling.
-- ⚠️ **Edge Case**: Empty string and invalid input validation.
-
-## 🛡️ Compliance & Standards
-
-- **Geocoding Bridge**: Implements the required two-step fetch (Search -> Extract -> Forecast).
-- **Security**: `.env` and `node_modules` are excluded via `.gitignore`.
-- **Documentation**: Functions follow JSDoc standards for clarity and maintainability.
-
-## 📝 License
-This project is licensed under the MIT License.
+- TypeScript
+- Open-Meteo API
+- ts-node
