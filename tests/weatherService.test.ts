@@ -8,6 +8,10 @@ test("getWeather (service) - Valid coordinates for Chiang Mai", async () => {
   assert.strictEqual(typeof data.windspeed, "number");
   assert.strictEqual(typeof data.time, "string");
   assert.ok(data.time.includes("T")); // ISO 8601 format
+  assert.ok(Array.isArray(data.forecast));
+  assert.strictEqual(data.forecast.length, 5);
+  assert.strictEqual(typeof data.forecast[0].maxTemp, "number");
+  assert.strictEqual(typeof data.forecast[0].minTemp, "number");
 });
 
 test("getWeather (service) - Edge case: Invalid coordinates (999, 999)", async () => {

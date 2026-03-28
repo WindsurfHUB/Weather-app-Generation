@@ -1,38 +1,42 @@
 import { fetchWeather } from "../api/weatherApi";
 import { Weather } from "../models/weatherModel";
+import { getFromCache, saveToCache } from "../utils/cache";
 
 /**
  * ดึงข้อมูลสภาพอากาศแบบเรียลไทม์ตามพิกัดภูมิศาสตร์ (Latitude & Longitude)
- * 
- * ฟังก์ชันนี้ทำหน้าที่เป็น Service Layer ที่เชื่อมต่อระหว่าง API และ UI
- * โดยจะรับพิกัดตัวเลขมา แล้วส่งกลับเป็นข้อมูลพยากรณ์อากาศที่จัดรูปแบบตาม Weather Model
+ * พร้อมระบบ Caching เพื่อลดการเรียกซ้ำ (ขั้นตอนที่ 3: Combine it all!)
  *
  * @async
- * @param {number} lat - ค่าละติจูด (Latitude) ของพื้นที่ (ตัวอย่าง: 18.7883)
- * @param {number} lon - ค่าลองจิจูด (Longitude) ของพื้นที่ (ตัวอย่าง: 98.9853)
- * 
- * @returns {Promise<Weather>} สัญญา (Promise) ที่จะคืนค่า Object ของสภาพอากาศ ซึ่งประกอบด้วย:
- *  - `temperature`: อุณหภูมิปัจจุบันในหน่วยเซลเซียส
- *  - `windspeed`: ความเร็วลมในหน่วยกิโลเมตรต่อชั่วโมง
- *  - `time`: เวลาที่มีการอัปเดตข้อมูลล่าสุด (ในรูปแบบ ISO 8601)
- * 
- * @throws {Error} จะโยนข้อผิดพลาดหากการเรียกใช้ API ล้มเหลว หรือได้รับข้อมูลที่ไม่ถูกต้องจาก Server
- * 
- * @example
- * // การเรียกใช้งานสำหรับนักพัฒนามือใหม่:
- * try {
- *   const data = await getWeather(18.7883, 98.9853);
- *   console.log(`ขณะนี้อุณหภูมิคือ ${data.temperature}°C`);
- * } catch (error) {
- *   console.error("เกิดข้อผิดพลาดในการดึงข้อมูล:", error);
- * }
+ * @param {number} lat - ค่าละติจูด (Latitude)
+ * @param {number} lon - ค่าลองจิจูด (Longitude)
+ * @returns {Promise<Weather>}
  */
 export async function getWeather(lat: number, lon: number): Promise<Weather> {
+  const cacheKey = `weather_${lat.toFixed(4)}_${lon.toFixed(4)}`;
+
+  // 1. ตรวจสอบใน Cache ก่อน (Check cache first)
+  const cachedData = getFromCache<Weather>(cacheKey);
+  if (cachedData) {
+    return cachedData;
+  }
+
+  // 2. หากไม่มีใน Cache หรือข้อมูลเก่าเกินไป ให้ดึงใหม่ (Fetch fresh data)
   const data = await fetchWeather(lat, lon);
 
-  return {
+  const weather: Weather = {
     temperature: data.current_weather.temperature,
     windspeed: data.current_weather.windspeed,
     time: data.current_weather.time,
+    forecast: data.daily.time.slice(0, 5).map((time: string, index: number) => ({
+      date: time,
+      maxTemp: data.daily.temperature_2m_max[index],
+      minTemp: data.daily.temperature_2m_min[index],
+    })),
   };
+
+  // 3. บันทึกลง Cache (Save to cache)
+  saveToCache(cacheKey, weather);
+
+  return weather;
 }
+

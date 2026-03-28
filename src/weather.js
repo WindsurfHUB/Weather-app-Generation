@@ -67,7 +67,7 @@ export async function getWeather(city) {
 
     // 2. Fetch Forecast: Query weather using coordinates
     // We include 'current' variables to satisfy the TRACI requirement for humidity and wind speed.
-    const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m`;
+    const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min&timezone=auto`;
     const weatherResponse = await fetch(weatherUrl);
 
     if (!weatherResponse.ok) {
@@ -76,6 +76,7 @@ export async function getWeather(city) {
 
     const weatherData = await weatherResponse.json();
     const current = weatherData.current;
+    const daily = weatherData.daily;
 
     // TRACI Requirement: Return specific JSON object
     return {
@@ -84,6 +85,11 @@ export async function getWeather(city) {
       description: getWeatherDescription(current.weather_code),
       humidity: current.relative_humidity_2m,
       wind_speed: current.wind_speed_10m,
+      forecast: daily.time.slice(0, 5).map((time, index) => ({
+        date: time,
+        maxTemp: daily.temperature_2m_max[index],
+        minTemp: daily.temperature_2m_min[index],
+      })),
     };
   } catch (error) {
     console.error(`Error in getWeather: ${error.message}`);

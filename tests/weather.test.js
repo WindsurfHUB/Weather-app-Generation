@@ -9,6 +9,8 @@ test("getWeather should return weather data for a valid city (Bangkok)", async (
   assert.strictEqual(typeof data.description, "string");
   assert.strictEqual(typeof data.humidity, "number");
   assert.strictEqual(typeof data.wind_speed, "number");
+  assert.ok(Array.isArray(data.forecast));
+  assert.strictEqual(data.forecast.length, 5);
 });
 
 test("getWeather should throw an error for a non-existent city", async () => {
