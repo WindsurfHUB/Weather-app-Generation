@@ -1,47 +1,93 @@
-# Weather Report App (TypeScript)
+# 🌦️ Weather App (TypeScript & Node.js)
 
-A modern, easy-to-use weather application for Chiang Mai using the Open-Meteo API.
+แอปพลิเคชันพยากรณ์อากาศที่ทันสมัย พัฒนาด้วย TypeScript และ Node.js โดยใช้ข้อมูลจาก Open-Meteo API เพื่อแสดงข้อมูลสภาพอากาศแบบเรียลไทม์
 
-## Project Structure
+---
 
-- `src/api/`: API call handling (Open-Meteo).
-- `src/models/`: TypeScript interfaces/types.
-- `src/services/`: Business logic and data processing.
-- `src/utils/`: Helper functions (formatting, conversion).
-- `src/ui/`: Display logic (Console).
-- `src/config/`: Application constants (Chiang Mai coordinates).
-- `src/index.ts`: Application entry point.
+## 📋 ภาพรวมโปรเจกต์ (Project Overview)
+โปรเจกต์นี้เป็นแอปพลิเคชันแสดงข้อมูลสภาพอากาศ (Weather Report) ที่เน้นความถูกต้องของข้อมูลและการจัดการข้อผิดพลาด (Error Handling) โดยมีทั้งระบบดึงข้อมูลตามชื่อเมือง (City Search) และการดึงข้อมูลตามพิกัดที่กำหนดไว้ล่วงหน้า (Fixed Coordinates)
 
-## Features
+---
 
-- Fetches real-time weather data for Chiang Mai.
-- Displays temperature in both Celsius and Fahrenheit.
-- Includes input validation and edge case handling for temperature conversions.
-- Modern console UI.
+## ✨ ฟีเจอร์เด่น (Features)
+*   **Real-time Weather:** ดึงข้อมูลอุณหภูมิ, ความเร็วลม และสถานะอากาศล่าสุด
+*   **Dual-Unit Support:** แสดงผลทั้งหน่วยเซลเซียส (°C) และฟาเรนไฮต์ (°F)
+*   **City Search:** ค้นหาสภาพอากาศตามชื่อเมือง (ผ่านระบบ Geocoding)
+*   **Robust Conversion:** ระบบแปลงอุณหภูมิที่รองรับกรณีขอบเขต (Edge Cases) เช่น จุดเยือกแข็งสัมบูรณ์
+*   **Comprehensive Testing:** มีชุดการทดสอบ (Test Suite) ครอบคลุมทั้ง Logic การคำนวณและ API Integration
 
-## Getting Started
+---
+
+## 🚀 คำแนะนำการติดตั้ง (Installation Instructions)
 
 ### Prerequisites
+*   [Node.js](https://nodejs.org/) (แนะนำเวอร์ชัน 18 ขึ้นไป)
+*   [npm](https://www.npmjs.com/)
 
-- Node.js
-- npm
+### Steps
+1.  โคลนโปรเจกต์ลงในเครื่องของคุณ
+2.  ติดตั้ง Library ที่จำเป็น (Dependencies):
+    ```bash
+    npm install
+    ```
 
-### Installation
+---
 
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
+## 💻 คู่มือการใช้งาน (Usage Guide)
 
-### Running the App
-
-Run the application using:
+### การรันแอปพลิเคชัน (Start App)
+คุณสามารถดูพยากรณ์อากาศของเชียงใหม่ (ค่าเริ่มต้น) ได้ด้วยคำสั่ง:
 ```bash
 npm start
 ```
 
-## Technologies Used
+### การทดสอบระบบ (Running Tests)
+รันชุดการทดสอบทั้งหมด (ทั้ง JavaScript และ TypeScript) เพื่อตรวจสอบความถูกต้องของระบบ:
+```bash
+npm test
+```
 
-- TypeScript
-- Open-Meteo API
-- ts-node
+---
+
+## 📊 ตัวอย่างผลลัพธ์ (Example Output)
+เมื่อรันคำสั่ง `npm start` คุณจะพบข้อมูลในลักษณะนี้:
+```text
+Fetching weather data for Chiang Mai...
+----------------------------
+   Modern Weather Report   
+----------------------------
+Temperature: 35.2°C (95.4°F)
+Wind Speed : 15.5 km/h
+Update Time: 2026-03-28T11:15
+----------------------------
+```
+
+---
+
+## 🛠️ ข้อมูล API (API Information)
+โปรเจกต์นี้ใช้บริการฟรีจาก **[Open-Meteo](https://open-meteo.com/)**:
+*   **Geocoding API:** เพื่อแปลงชื่อเมืองเป็นพิกัดละติจูด/ลองจิจูด
+*   **Forecast API:** เพื่อดึงข้อมูลอุณหภูมิและสภาพอากาศแบบปัจจุบัน
+
+---
+
+## 🛡️ การจัดการข้อผิดพลาด (Error Handling)
+แอปพลิเคชันมีการจัดการสถานการณ์ต่างๆ อย่างเป็นระบบ:
+*   **Invalid City:** หากระบุชื่อเมืองไม่ถูกต้อง ระบบจะแจ้งเตือนว่า "City not found"
+*   **Invalid Input:** ป้องกันการป้อนข้อมูลอุณหภูมิที่ไม่เป็นตัวเลขหรือต่ำกว่าจุดเยือกแข็งสัมบูรณ์
+*   **API Failure:** มีการตรวจสอบสถานะการเชื่อมต่อ และแจ้งเตือนหาก API ไม่สามารถเข้าถึงได้
+
+---
+
+## 🧪 กรณีทดสอบ (Test Cases)
+เราใช้การทดสอบ 3 ระดับ:
+1.  **Unit Tests:** ตรวจสอบสูตรการแปลงอุณหภูมิและความแม่นยำของทศนิยม
+2.  **Integration Tests:** ตรวจสอบการทำงานร่วมกันระหว่างโค้ดกับ API จริง
+3.  **Edge Cases:** ทดสอบค่าขอบเขต เช่น อุณหภูมิต่ำสุดที่เป็นไปได้ และข้อมูลที่ผิดรูปแบบ
+
+---
+
+## 📈 การปรับปรุงในอนาคต (Future Improvements)
+*   เพิ่มระบบรับ input จากผู้ใช้โดยตรงผ่าน CLI (Interactive Search)
+*   แสดงพยากรณ์อากาศล่วงหน้า 7 วัน
+*   บันทึกประวัติการค้นหาข้อมูลสภาพอากาศลงในไฟล์
