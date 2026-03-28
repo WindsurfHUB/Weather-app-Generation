@@ -1,3 +1,8 @@
+import dotenv from "dotenv";
+dotenv.config();
+
+const BASE_URL = process.env.WEATHER_BASE_URL || "https://api.open-meteo.com/v1/forecast";
+
 /**
  * Utility to map Open-Meteo weather codes to human-readable descriptions.
  * @param {number} code - The WMO weather interpretation code.
@@ -67,7 +72,7 @@ export async function getWeather(city) {
 
     // 2. Fetch Forecast: Query weather using coordinates
     // We include 'current' variables to satisfy the TRACI requirement for humidity and wind speed.
-    const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min&timezone=auto`;
+    const weatherUrl = `${BASE_URL}?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min&timezone=auto`;
     const weatherResponse = await fetch(weatherUrl);
 
     if (!weatherResponse.ok) {
